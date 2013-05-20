@@ -5,6 +5,7 @@ import com.entities.Person;
 import com.util.ConnectionConfiguration;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
@@ -25,7 +26,7 @@ public class PersonDaoImpl implements PersonDao {
 			connection = ConnectionConfiguration.getConnection();
 			statement = connection.createStatement();
 			statement.execute("CREATE TABLE IF NOT EXISTS person (id int primary key unique auto_increment," +
-					"first_name varchar(55), last_last varchar(55))");
+					"first_name varchar(55), last_name varchar(55))");
 
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -50,7 +51,38 @@ public class PersonDaoImpl implements PersonDao {
 
 	@Override
 	public void insert(Person person) {
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
 
+		try {
+			connection = ConnectionConfiguration.getConnection();
+			preparedStatement = connection.prepareStatement("INSERT INTO person (first_name,last_name)" +
+					"VALUES (?, ?)");
+			preparedStatement.setString(1, person.getFirstName());
+			preparedStatement.setString(2, person.getLastName());
+			preparedStatement.executeUpdate();
+			System.out.println("INSERT INTO person (first_name,last_name)" +
+					"VALUES (?, ?)");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(preparedStatement != null) {
+				try {
+					preparedStatement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+
+			if(connection !=null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 	@Override

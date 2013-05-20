@@ -1,4 +1,5 @@
 import com.daoimpl.PersonDaoImpl;
+import com.entities.Person;
 import com.util.ConnectionConfiguration;
 
 import java.sql.Connection;
@@ -14,7 +15,8 @@ public class App {
 
 	public static void main(String [] args) {
 		PersonDaoImpl pdi = new PersonDaoImpl();
-		pdi.createPersonTable();
-
+		//pdi.createPersonTable();
+		Person person = new Person("John","Johnson");
+		pdi.insert(person);
 	}
 }
