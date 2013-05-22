@@ -16,7 +16,9 @@ public class App {
 	public static void main(String [] args) {
 		PersonDaoImpl pdi = new PersonDaoImpl();
 		//pdi.createPersonTable();
-		Person person = new Person("John","Johnson");
-		pdi.insert(person);
+		//Person person = new Person("Jane","Johnson");
+		//pdi.insert(person);
+		Person person = pdi.selectById(2);
+		System.out.println(person.getId()+", "+person.getFirstName()+", "+person.getLastName());
 	}
 }

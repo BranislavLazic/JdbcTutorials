@@ -4,10 +4,7 @@ import com.dao.PersonDao;
 import com.entities.Person;
 import com.util.ConnectionConfiguration;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.List;
 
 /**
@@ -87,7 +84,50 @@ public class PersonDaoImpl implements PersonDao {
 
 	@Override
 	public Person selectById(int id) {
-		return null;
+		Person person = new Person();
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+
+		try {
+			connection = ConnectionConfiguration.getConnection();
+			preparedStatement = connection.prepareStatement("SELECT * FROM person WHERE id = ?");
+			preparedStatement.setInt(1,id);
+			resultSet = preparedStatement.executeQuery();
+
+			while(resultSet.next()) {
+				person.setId(resultSet.getInt("id"));
+				person.setFirstName(resultSet.getString("first_name"));
+				person.setLastName(resultSet.getString("last_name"));
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(resultSet != null) {
+				try {
+					resultSet.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(preparedStatement !=null) {
+				try {
+					preparedStatement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(connection !=null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return person;
 	}
 
 	@Override
