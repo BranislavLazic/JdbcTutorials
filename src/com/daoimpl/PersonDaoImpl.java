@@ -5,6 +5,7 @@ import com.entities.Person;
 import com.util.ConnectionConfiguration;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -132,12 +133,72 @@ public class PersonDaoImpl implements PersonDao {
 
 	@Override
 	public List<Person> selectAll() {
-		return null;
+		List<Person> persons = new ArrayList<Person>();
+		Connection connection = null;
+		Statement statement = null;
+		ResultSet resultSet = null;
+
+		try {
+			connection = ConnectionConfiguration.getConnection();
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery("SELECT * FROM person");
+
+			while (resultSet.next()) {
+				Person person = new Person();
+				person.setId(resultSet.getInt("id"));
+				person.setFirstName(resultSet.getString("first_name"));
+				person.setLastName(resultSet.getString("last_name"));
+
+				persons.add(person);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(resultSet != null) {
+				try {
+					resultSet.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return persons;
 	}
 
 	@Override
 	public void delete(int id) {
+	 	Connection connection = null;
+		PreparedStatement preparedStatement = null;
 
+		try {
+			connection = ConnectionConfiguration.getConnection();
+			preparedStatement = connection.prepareStatement("DELETE FROM person WHERE id = ?");
+			preparedStatement.setInt(1,id);
+			preparedStatement.executeUpdate();
+
+			System.out.println("DELETE FROM person WHERE id = ?");
+
+		}catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+
+		}
 	}
 
 	@Override
