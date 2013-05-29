@@ -16,17 +16,29 @@ public class App {
 
 	public static void main(String [] args) {
 		PersonDaoImpl pdi = new PersonDaoImpl();
-		//pdi.createPersonTable();
-		//Person person = new Person("Maria","Thompson");
-		//pdi.insert(person);
-		//Person person = pdi.selectById(2);
-		//System.out.println(person.getId()+", "+person.getFirstName()+", "+person.getLastName());
 
+		/**Create table**/
+		pdi.createPersonTable();
+
+		/**Insert a new record**/
+		Person person = new Person("John","Johnson");
+		pdi.insert(person);
+
+		/**Select by id**/
+		Person personSelect = pdi.selectById(2);
+		System.out.println(person.getId()+", "+person.getFirstName()+", "+person.getLastName());
+
+		/**Delete person by id**/
 		pdi.delete(3);
 
+		/**Update person**/
+		Person personUpdate = new Person("Tom","Johnson");
+		pdi.update(personUpdate,1);
+
+		/**Select all persons**/
 		List<Person> persons = pdi.selectAll();
-		for(Person person : persons) {
-			System.out.println(person.getId()+", "+person.getFirstName()+", "+person.getLastName());
+		for(Person p : persons) {
+			System.out.println(p.getId()+", "+p.getFirstName()+", "+p.getLastName());
 		}
 
 	}
