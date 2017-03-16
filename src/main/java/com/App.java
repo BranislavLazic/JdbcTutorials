@@ -1,3 +1,5 @@
+package com;
+
 import com.daoimpl.PersonDaoImpl;
 import com.entities.Person;
 import com.util.ConnectionConfiguration;
